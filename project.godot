@@ -11,10 +11,23 @@ config_version=5
 [application]
 
 config/name="Sonibleinin"
-run/main_scene="res://Scenes/node_2d.tscn"
+run/main_scene="res://Scenes/World.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://Sprites/icon.svg"
+
+[display]
+
+window/size/viewport_width=320
+window/size/viewport_height=180
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
 
 [dotnet]
 
 project/assembly_name="Sonibleinin"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
