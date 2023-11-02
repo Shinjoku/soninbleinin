@@ -1,4 +1,10 @@
+using System;
 using Godot;
+
+enum AnimationTreeParameters
+{
+	BlendPosition
+}
 
 public partial class Player : CharacterBody2D
 {
@@ -11,13 +17,13 @@ public partial class Player : CharacterBody2D
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-    public override void _Ready()
-    {
-        _animationTree = GetNode<AnimationTree>(nameof(AnimationTree));
-        _animationState = (AnimationNodeStateMachinePlayback)_animationTree.Get("parameters/playback");
-    }
+	public override void _Ready()
+	{
+		_animationTree = GetNode<AnimationTree>(nameof(AnimationTree));
+		_animationState = (AnimationNodeStateMachinePlayback)_animationTree.Get("parameters/playback");
+	}
 
-    public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = Velocity;
 
@@ -36,15 +42,21 @@ public partial class Player : CharacterBody2D
 		_animationState.Travel("Run");
 		return direction * Speed;
 	}
-	
+
 	public Vector2 Stop(Vector2 velocity)
 	{
 		_animationState.Travel("Idle");
 		return velocity.MoveToward(Vector2.Zero, Speed);
 	}
 
-	private void SetAnimationTree(string param, Vector2 vector) =>
-		_animationTree.Set($"parameters/{param}/blend_position", vector);
+	private void SetAnimationTree(string animation, Vector2 vector, AnimationTreeParameters param = AnimationTreeParameters.BlendPosition) =>
+		_animationTree.Set($"parameters/{animation}/{GetParameterString(param)}", vector);
+
+	private string GetParameterString(AnimationTreeParameters param) => param switch
+	{
+		AnimationTreeParameters.BlendPosition => "blend_position",
+		_ => throw new NotImplementedException()
+	};
 
 	// Commented code:
 	// Add the gravity.
