@@ -16,7 +16,6 @@ enum PlayerState
 public partial class Player : CharacterBody2D
 {
     public const float Speed = 80.0f;
-    public const float JumpVelocity = -400.0f;
     private AnimationTree _animationTree = null;
     private AnimationNodeStateMachinePlayback _animationState = null;
     private AnimationPlayer _animationPlayer = null;
@@ -37,9 +36,9 @@ public partial class Player : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         if (_playerState == PlayerState.Move)
-            MoveState(delta);
+            MoveState();
         else if (_playerState == PlayerState.Attack)
-            AttackState(delta);
+            AttackState();
     }
 
     public Vector2 Walk(Vector2 direction)
@@ -51,10 +50,10 @@ public partial class Player : CharacterBody2D
         return direction * Speed;
     }
 
-    public Vector2 Stop(Vector2 velocity)
+    public Vector2 Stop()
     {
         _animationState.Travel("Idle");
-        return velocity.MoveToward(Vector2.Zero, Speed);
+        return Vector2.Zero;
     }
 
     public void AttackAnimationFinished()
@@ -71,14 +70,12 @@ public partial class Player : CharacterBody2D
         _ => throw new NotImplementedException()
     };
 
-    private void MoveState(double delta)
+    private void MoveState()
     {
-        Vector2 velocity = Velocity;
-
         Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
         Velocity = direction != Vector2.Zero ?
-            Walk(direction) : Stop(velocity);
+            Walk(direction) : Stop();
 
         MoveAndSlide();
 
@@ -86,7 +83,7 @@ public partial class Player : CharacterBody2D
             _playerState = PlayerState.Attack;
     }
 
-    private void AttackState(double delta)
+    private void AttackState()
     {
         _animationState.Travel("Attack");
     }
