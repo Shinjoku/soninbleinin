@@ -18,17 +18,14 @@ public partial class Player : CharacterBody2D
     public const float Speed = 80.0f;
     private AnimationTree _animationTree = null;
     private AnimationNodeStateMachinePlayback _animationState = null;
-    private AnimationPlayer _animationPlayer = null;
     private PlayerState _playerState = PlayerState.Move;
 
-    // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
     public override void _Ready()
     {
         _animationTree = GetNode<AnimationTree>(nameof(AnimationTree));
         _animationState = (AnimationNodeStateMachinePlayback)_animationTree.Get("parameters/playback");
-        _animationPlayer = GetNode<AnimationPlayer>(nameof(AnimationPlayer));
 
         _animationTree.Active = true;
     }
@@ -87,13 +84,4 @@ public partial class Player : CharacterBody2D
     {
         _animationState.Travel("Attack");
     }
-
-    // Commented code:
-    // Add the gravity.
-    // if (!IsOnFloor())
-    // 	velocity.Y += gravity * (float)delta;
-
-    // Handle Jump.
-    // if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-    // 	velocity.Y = JumpVelocity;
 }
