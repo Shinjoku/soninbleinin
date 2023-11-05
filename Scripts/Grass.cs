@@ -10,10 +10,6 @@ public partial class Grass : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (!Input.IsActionJustPressed("attack")) return;
-		
-		Die();
-		QueueFree();
 	}
 
 	private void Die() {
@@ -23,5 +19,10 @@ public partial class Grass : Node2D
 		
 		var grassesNode = GetParent();
 		grassesNode.AddChild(grassEffect);
+	}
+
+	public void _OnHurtboxAreaEntered(Area2D body) {
+		Die();
+		QueueFree();
 	}
 }

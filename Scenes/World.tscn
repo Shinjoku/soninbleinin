@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://ig0o3gakr7d0" path="res://Assets/World/DirtTileset.png" id="2_w5ebb"]
 [ext_resource type="Texture2D" uid="uid://bp3u64awk8c8i" path="res://Assets/World/CliffTileset.png" id="3_8bu04"]
 [ext_resource type="Texture2D" uid="uid://cchgtkofbpg5c" path="res://Assets/World/GrassBackground.png" id="3_cku18"]
-[ext_resource type="PackedScene" uid="uid://dbr5bbngpvvhb" path="res://Scenes/Player.tscn" id="4_g1bks"]
-[ext_resource type="PackedScene" uid="uid://r5r4sg4ttpob" path="res://Scenes/Bush.tscn" id="5_hjuae"]
+[ext_resource type="PackedScene" uid="uid://dbr5bbngpvvhb" path="res://Scenes/player.tscn" id="4_g1bks"]
+[ext_resource type="PackedScene" uid="uid://r5r4sg4ttpob" path="res://Scenes/bush.tscn" id="5_hjuae"]
 [ext_resource type="PackedScene" uid="uid://81k1c28020fn" path="res://Scenes/Grass.tscn" id="6_lk2x8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekogc"]
@@ -811,6 +811,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_0cxva"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 0
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_uhchl")
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain 0"
