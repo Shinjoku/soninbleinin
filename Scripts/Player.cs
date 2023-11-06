@@ -15,7 +15,8 @@ enum PlayerState
 
 public partial class Player : CharacterBody2D
 {
-    public const float Speed = 80.0f;
+    public const float WalkSpeed = 60.0f;
+    public const float RollSpeed = 120.0f;
     private AnimationTree _animationTree = null;
     private AnimationNodeStateMachinePlayback _animationState = null;
     private PlayerState _playerState = PlayerState.Move;
@@ -32,8 +33,12 @@ public partial class Player : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
+        Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+
         if (_playerState == PlayerState.Move)
-            MoveState();
+            MoveState(direction);
+        else if (_playerState == PlayerState.Roll)
+            RollState(direction);
         else if (_playerState == PlayerState.Attack)
             AttackState();
     }
@@ -43,8 +48,14 @@ public partial class Player : CharacterBody2D
         SetAnimationTree("Idle", direction);
         SetAnimationTree("Run", direction);
         SetAnimationTree("Attack", direction);
+        SetAnimationTree("Roll", direction);
         _animationState.Travel("Run");
-        return direction * Speed;
+        return direction * WalkSpeed;
+    }
+
+    public Vector2 Roll(Vector2 direction) {
+        _animationState.Travel("Roll");
+        return direction * RollSpeed;
     }
 
     public Vector2 Stop()
@@ -53,7 +64,7 @@ public partial class Player : CharacterBody2D
         return Vector2.Zero;
     }
 
-    public void AttackAnimationFinished()
+    public void ResetPlayerState()
     {
         _playerState = PlayerState.Move;
     }
@@ -67,10 +78,8 @@ public partial class Player : CharacterBody2D
         _ => throw new NotImplementedException()
     };
 
-    private void MoveState()
+    private void MoveState(Vector2 direction)
     {
-        Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-
         Velocity = direction != Vector2.Zero ?
             Walk(direction) : Stop();
 
@@ -78,10 +87,19 @@ public partial class Player : CharacterBody2D
 
         if (Input.IsActionJustPressed("attack"))
             _playerState = PlayerState.Attack;
+        else if (Input.IsActionJustPressed("roll"))
+            _playerState = PlayerState.Roll;
+    }
+
+    private void RollState(Vector2 direction) {
+        Velocity = Roll(direction);
+        MoveAndSlide();
+        _animationState.Travel("Roll");
     }
 
     private void AttackState()
     {
         _animationState.Travel("Attack");
     }
+
 }
