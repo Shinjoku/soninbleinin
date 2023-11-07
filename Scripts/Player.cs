@@ -20,6 +20,7 @@ public partial class Player : CharacterBody2D
     private AnimationTree _animationTree = null;
     private AnimationNodeStateMachinePlayback _animationState = null;
     private PlayerState _playerState = PlayerState.Move;
+    private SwordHitbox _swordHitbox = null;
 
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
@@ -27,6 +28,7 @@ public partial class Player : CharacterBody2D
     {
         _animationTree = GetNode<AnimationTree>(nameof(AnimationTree));
         _animationState = (AnimationNodeStateMachinePlayback)_animationTree.Get("parameters/playback");
+        _swordHitbox = GetNode<SwordHitbox>("HitboxPivot/SwordHitbox");
 
         _animationTree.Active = true;
     }
@@ -34,6 +36,8 @@ public partial class Player : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+
+        _swordHitbox.KnockbackVector = direction;
 
         if (_playerState == PlayerState.Move)
             MoveState(direction);
