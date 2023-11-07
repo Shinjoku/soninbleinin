@@ -1,9 +1,10 @@
-[gd_scene load_steps=53 format=3 uid="uid://dbr5bbngpvvhb"]
+[gd_scene load_steps=54 format=3 uid="uid://dbr5bbngpvvhb"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_nfmel"]
 [ext_resource type="Texture2D" uid="uid://bpjp8a6vnpn7q" path="res://Assets/Player/Player.png" id="2_xsa33"]
 [ext_resource type="PackedScene" uid="uid://dt0si5fkm766m" path="res://Hitboxes and Hurtboxes/Hitbox.tscn" id="3_003gc"]
 [ext_resource type="Script" path="res://Scripts/SwordHitbox.cs" id="4_5c6gd"]
+[ext_resource type="PackedScene" uid="uid://bhn3p0erbs7hg" path="res://Scenes/Stats.tscn" id="5_6s68v"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wlvgm"]
 radius = 4.0
@@ -710,5 +711,9 @@ script = ExtResource("4_5c6gd")
 [node name="CollisionShape2D" parent="HitboxPivot/SwordHitbox" index="0"]
 shape = SubResource("CapsuleShape2D_0dn2w")
 disabled = true
+
+[node name="Stats" parent="." instance=ExtResource("5_6s68v")]
+MaxHealth = 10
+Health = 10
 
 [editable path="HitboxPivot/SwordHitbox"]

@@ -15,8 +15,10 @@ enum PlayerState
 
 public partial class Player : CharacterBody2D
 {
-    public const float WalkSpeed = 60.0f;
-    public const float RollSpeed = 120.0f;
+    [Export]
+    public float WalkSpeed = 60.0f;
+    [Export]
+    public float RollSpeed = 120.0f;
     private AnimationTree _animationTree = null;
     private AnimationNodeStateMachinePlayback _animationState = null;
     private PlayerState _playerState = PlayerState.Move;
