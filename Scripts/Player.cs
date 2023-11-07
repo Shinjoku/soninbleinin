@@ -37,8 +37,6 @@ public partial class Player : CharacterBody2D
     {
         Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
-        _swordHitbox.KnockbackVector = direction;
-
         if (_playerState == PlayerState.Move)
             MoveState(direction);
         else if (_playerState == PlayerState.Roll)
@@ -53,6 +51,9 @@ public partial class Player : CharacterBody2D
         SetAnimationTree("Run", direction);
         SetAnimationTree("Attack", direction);
         SetAnimationTree("Roll", direction);
+
+        _swordHitbox.KnockbackVector = direction;
+
         _animationState.Travel("Run");
         return direction * WalkSpeed;
     }
@@ -73,8 +74,9 @@ public partial class Player : CharacterBody2D
         _playerState = PlayerState.Move;
     }
 
-    private void SetAnimationTree(string animation, Vector2 vector, AnimationTreeParameters param = AnimationTreeParameters.BlendPosition) =>
+    private void SetAnimationTree(string animation, Vector2 vector, AnimationTreeParameters param = AnimationTreeParameters.BlendPosition){
         _animationTree.Set($"parameters/{animation}/{GetParameterString(param)}", vector);
+    }
 
     private string GetParameterString(AnimationTreeParameters param) => param switch
     {
