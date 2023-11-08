@@ -912,10 +912,19 @@ position = Vector2(96, 112)
 y_sort_enabled = true
 
 [node name="Bat" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
-position = Vector2(112, 96)
+position = Vector2(96, 100)
 
 [node name="Bat2" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
-position = Vector2(40, 72)
+position = Vector2(131, 136)
 
 [node name="Bat3" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
-position = Vector2(208, 144)
+position = Vector2(170, 119)
+
+[node name="Bat4" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
+position = Vector2(217, 97)
+
+[node name="Bat5" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
+position = Vector2(256, 126)
+
+[node name="Bat6" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
+position = Vector2(218, 158)
