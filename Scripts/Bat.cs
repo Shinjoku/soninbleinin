@@ -3,6 +3,8 @@ using System;
 
 public partial class Bat : CharacterBody2D
 {
+	private PackedScene EnemyDeathEffectScene = ResourceLoader.Load<PackedScene>("res://Scenes/EnemyDeathEffect.tscn");
+
 	private Vector2 _knockback = Vector2.Zero;
 
 	private Stats _stats;
@@ -27,8 +29,15 @@ public partial class Bat : CharacterBody2D
 		}
 	}
 
+	private void Die() {
+		var deathEffect = EnemyDeathEffectScene.Instantiate<Effect>();
+		deathEffect.Position = Position;
+		GetParent().AddChild(deathEffect);
+	}
+
 	public void _OnHealthEmpty()
 	{
+		Die();
 		QueueFree();
 	}
 }

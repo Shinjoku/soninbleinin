@@ -2,26 +2,19 @@ using Godot;
 
 public partial class Grass : Node2D
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
+	private PackedScene GrassEffectScene = ResourceLoader.Load<PackedScene>("res://Scenes/GrassEffect.tscn");
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	private void Die()
 	{
-	}
-
-	private void Die() {
-		var GrassEffectScene = GD.Load<PackedScene>("res://Scenes/GrassEffect.tscn");
-		var grassEffect = GrassEffectScene.Instantiate<GrassEffect>();
+		var grassEffect = GrassEffectScene.Instantiate<Effect>();
 		grassEffect.Position = Position;
-		
+
 		var grassesNode = GetParent();
 		grassesNode.AddChild(grassEffect);
 	}
 
-	public void _OnHurtboxAreaEntered(Area2D body) {
+	public void _OnHurtboxAreaEntered(Area2D body)
+	{
 		Die();
 		QueueFree();
 	}
