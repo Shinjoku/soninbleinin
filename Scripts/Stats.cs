@@ -4,24 +4,22 @@ using System;
 public partial class Stats : Node
 {
 	private const int _initialMaxHealth = 2;
+	private int _health = _initialMaxHealth;
 	
 	[Export]
 	public int MaxHealth { get; set; } = _initialMaxHealth;
 
 	[Export]
-	public int Health { get; set; } = _initialMaxHealth;
+	public int Health {
+		get { return _health; } 
+		set {
+			_health = value;
+			if (_health <= 0)
+				EmitSignal("HealthEmpty");
+		}
+	}
 
 	[Signal]
 	public delegate void HealthEmptyEventHandler();
-
-    public override void _Process(double delta)
-    {
-        if (Health <= 0)
-			EmitSignal(nameof(HealthEmptyEventHandler));
-    }
 	
-	public void SetHealth(int value)
-	{
-		Health = value;
-	}
 }

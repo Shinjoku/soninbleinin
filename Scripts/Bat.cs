@@ -7,12 +7,12 @@ public partial class Bat : CharacterBody2D
 
 	private Stats _stats;
 
-    public override void _Ready()
-    {
-        _stats = GetNode<Stats>(nameof(Stats));
-    }
+	public override void _Ready()
+	{
+		_stats = GetNode<Stats>(nameof(Stats));
+	}
 
-    public override void _PhysicsProcess(double delta) {
+	public override void _PhysicsProcess(double delta) {
 		_knockback = _knockback.MoveToward(Vector2.Zero, 100 * (float) delta);
 		Velocity = _knockback;
 		MoveAndSlide();
@@ -23,7 +23,7 @@ public partial class Bat : CharacterBody2D
 		if (area is SwordHitbox swordHitbox) 
 		{
 			_knockback = swordHitbox.KnockbackVector * swordHitbox.KnockbackForce;
-			_stats.SetHealth(_stats.Health - swordHitbox.Damage);
+			_stats.Health -= swordHitbox.Damage;
 		}
 	}
 
