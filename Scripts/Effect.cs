@@ -5,6 +5,6 @@ public partial class Effect : AnimatedSprite2D
 	public override void _Ready()
 	{
 		Play("Animate");
-		AnimationFinished += () => QueueFree();
+		AnimationFinished += QueueFree;
 	}
 }
