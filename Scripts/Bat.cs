@@ -1,6 +1,13 @@
 using Godot;
 using System;
 
+enum State {
+	Knockback,
+	Idle,
+	Wander,
+	Chase
+}
+
 public partial class Bat : CharacterBody2D
 {
 	private PackedScene EnemyDeathEffectScene = ResourceLoader.Load<PackedScene>("res://Scenes/EnemyDeathEffect.tscn");
@@ -9,15 +16,81 @@ public partial class Bat : CharacterBody2D
 
 	private Stats _stats;
 
+	private State _state = State.Idle;
+
+	private PlayerDetectionZone _playerDetectionZone;
+
+	private AnimatedSprite2D _sprite;
+
+	[Export]
+	public int Acceleration = 50;
+	[Export]
+	public int MaxSpeed = 50;
+	[Export]
+	public int Friction = 100;
+
 	public override void _Ready()
 	{
 		_stats = GetNode<Stats>(nameof(Stats));
+		_playerDetectionZone = GetNode<PlayerDetectionZone>(nameof(PlayerDetectionZone));
+		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
 	}
 
-	public override void _PhysicsProcess(double delta) {
-		_knockback = _knockback.MoveToward(Vector2.Zero, 100 * (float) delta);
-		Velocity = _knockback;
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_state == State.Knockback)
+			KnockbackState(delta);
+		else if (_state == State.Idle)
+			IdleState(delta);
+		else if (_state == State.Wander)
+			WanderState();
+		else if (_state == State.Chase)
+			ChaseState(delta);
+
 		MoveAndSlide();
+	}
+
+	private void Stop(double delta) {
+		Velocity = Velocity.MoveToward(Vector2.Zero, Friction * (float) delta);
+	}
+
+	private void KnockbackState(double delta)
+	{
+		_knockback = _knockback.MoveToward(Vector2.Zero, Friction * (float) delta);
+		Velocity = _knockback;
+
+		if (_knockback == Vector2.Zero)
+			_state = State.Idle;
+	}
+
+	private void IdleState(double delta)
+	{
+		DetectPlayer();
+		Stop(delta);
+	}
+
+	private void WanderState()
+	{}
+
+	private void ChaseState(double delta)
+	{
+		var player = _playerDetectionZone.Player;
+
+		if (player == null) {
+			_state = State.Idle;
+			Stop(delta);
+			return;
+		}
+
+		var direction = (player.GlobalPosition - GlobalPosition).Normalized();
+		Velocity = Velocity.MoveToward(direction * MaxSpeed, Acceleration * (float) delta);
+		_sprite.FlipH = direction.X < 0;
+	}
+
+	private void DetectPlayer()
+	{
+		if (_playerDetectionZone.CanSeePlayer())
+			_state = State.Chase;
 	}
 
 	private void _OnHurtboxAreaEntered(Area2D area)
@@ -26,6 +99,7 @@ public partial class Bat : CharacterBody2D
 		{
 			_knockback = swordHitbox.KnockbackVector * swordHitbox.KnockbackForce;
 			_stats.Health -= swordHitbox.Damage;
+			_state = State.Knockback;
 		}
 	}
 
