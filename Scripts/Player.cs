@@ -24,15 +24,17 @@ public partial class Player : CharacterBody2D
     private PlayerState _playerState = PlayerState.Move;
     private SwordHitbox _swordHitbox = null;
 
-    public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+    private Stats _playerStats = null;
 
     public override void _Ready()
     {
         _animationTree = GetNode<AnimationTree>(nameof(AnimationTree));
         _animationState = (AnimationNodeStateMachinePlayback)_animationTree.Get("parameters/playback");
         _swordHitbox = GetNode<SwordHitbox>("HitboxPivot/SwordHitbox");
+        _playerStats = GetNode<Stats>("/root/PlayerStats");
 
         _animationTree.Active = true;
+        _playerStats.HealthEmpty += QueueFree;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -110,4 +112,7 @@ public partial class Player : CharacterBody2D
         _animationState.Travel("Attack");
     }
 
+    public void _OnHurtboxAreaEntered(Area2D area) {
+        _playerStats.Health -= 1;
+    }
 }
