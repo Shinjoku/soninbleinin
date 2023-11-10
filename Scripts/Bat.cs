@@ -1,7 +1,8 @@
 using Godot;
 using System;
 
-enum State {
+enum State
+{
 	Knockback,
 	Idle,
 	Wander,
@@ -11,16 +12,12 @@ enum State {
 public partial class Bat : CharacterBody2D
 {
 	private PackedScene EnemyDeathEffectScene = ResourceLoader.Load<PackedScene>("res://Scenes/EnemyDeathEffect.tscn");
-
 	private Vector2 _knockback = Vector2.Zero;
-
 	private Stats _stats;
-
 	private State _state = State.Idle;
-
 	private PlayerDetectionZone _playerDetectionZone;
-
 	private AnimatedSprite2D _sprite;
+	private Hurtbox _hurtbox = null;
 
 	[Export]
 	public int Acceleration = 50;
@@ -34,6 +31,7 @@ public partial class Bat : CharacterBody2D
 		_stats = GetNode<Stats>(nameof(Stats));
 		_playerDetectionZone = GetNode<PlayerDetectionZone>(nameof(PlayerDetectionZone));
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
+		_hurtbox = GetNode<Hurtbox>(nameof(Hurtbox));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -47,16 +45,17 @@ public partial class Bat : CharacterBody2D
 		else if (_state == State.Chase)
 			ChaseState(delta);
 
-		MoveAndSlide();
+		MoveAndCollide(Velocity * (float)delta);
 	}
 
-	private void Stop(double delta) {
-		Velocity = Velocity.MoveToward(Vector2.Zero, Friction * (float) delta);
+	private void Stop(double delta)
+	{
+		Velocity = Velocity.MoveToward(Vector2.Zero, Friction * (float)delta);
 	}
 
 	private void KnockbackState(double delta)
 	{
-		_knockback = _knockback.MoveToward(Vector2.Zero, Friction * (float) delta);
+		_knockback = _knockback.MoveToward(Vector2.Zero, Friction * (float)delta);
 		Velocity = _knockback;
 
 		if (_knockback == Vector2.Zero)
@@ -70,20 +69,21 @@ public partial class Bat : CharacterBody2D
 	}
 
 	private void WanderState()
-	{}
+	{ }
 
 	private void ChaseState(double delta)
 	{
 		var player = _playerDetectionZone.Player;
 
-		if (player == null) {
+		if (player == null)
+		{
 			_state = State.Idle;
 			Stop(delta);
 			return;
 		}
 
 		var direction = (player.GlobalPosition - GlobalPosition).Normalized();
-		Velocity = Velocity.MoveToward(direction * MaxSpeed, Acceleration * (float) delta);
+		Velocity = Velocity.MoveToward(direction * MaxSpeed, Acceleration * (float)delta);
 		_sprite.FlipH = direction.X < 0;
 	}
 
@@ -95,15 +95,17 @@ public partial class Bat : CharacterBody2D
 
 	private void _OnHurtboxAreaEntered(Area2D area)
 	{
-		if (area is SwordHitbox swordHitbox) 
+		if (area is SwordHitbox swordHitbox)
 		{
 			_knockback = swordHitbox.KnockbackVector * swordHitbox.KnockbackForce;
 			_stats.Health -= swordHitbox.Damage;
 			_state = State.Knockback;
+			_hurtbox.CreateHitEffect();
 		}
 	}
 
-	private void Die() {
+	private void Die()
+	{
 		var deathEffect = EnemyDeathEffectScene.Instantiate<Effect>();
 		deathEffect.Position = Position;
 		GetParent().AddChild(deathEffect);
