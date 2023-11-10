@@ -61,8 +61,9 @@ height = 18.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_hjqs3"]
 radius = 60.0083
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_pcr8y"]
-radius = 6.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lga"]
+radius = 8.0
+height = 18.0
 
 [node name="Bat" type="CharacterBody2D"]
 collision_layer = 0
@@ -103,7 +104,8 @@ collision_layer = 32
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2(0, -16)
-shape = SubResource("CircleShape2D_pcr8y")
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_l5lga")
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_OnHurtboxAreaEntered"]
 [connection signal="HealthEmpty" from="Stats" to="." method="_OnHealthEmpty"]
