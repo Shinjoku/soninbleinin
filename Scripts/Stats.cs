@@ -1,13 +1,23 @@
-using Godot;
 using System;
+using Godot;
 
 public partial class Stats : Node
 {
 	private const int _initialMaxHealth = 2;
 	private int _health = _initialMaxHealth;
+	private int _maxHealth = _initialMaxHealth;
 
 	[Export]
-	public int MaxHealth { get; set; } = _initialMaxHealth;
+	public int MaxHealth
+	{
+		get => _maxHealth;
+		set
+		{
+			_maxHealth = value;
+			Health = Math.Min(Health, _maxHealth);
+			EmitSignal("MaxHealthChanged");
+		}
+	}
 
 	[Export]
 	public int Health
@@ -30,4 +40,9 @@ public partial class Stats : Node
 
 	[Signal]
 	public delegate void MaxHealthChangedEventHandler(int newHearts);
+
+	public override void _Ready()
+	{
+		Health = MaxHealth;
+	}
 }

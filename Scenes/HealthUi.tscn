@@ -20,8 +20,8 @@ stretch_mode = 1
 
 [node name="HeartUiFull" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 59.0
 offset_bottom = 11.0
 texture = ExtResource("3_5lq3e")
+expand_mode = 1
 stretch_mode = 1
 metadata/_edit_group_ = true

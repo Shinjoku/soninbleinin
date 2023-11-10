@@ -31,6 +31,10 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="Sonibleinin"
 
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 ui_left={

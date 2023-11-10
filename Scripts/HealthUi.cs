@@ -4,6 +4,7 @@ using Godot;
 public partial class HealthUi : Control
 {
 	private TextureRect _heartsRect = null;
+	private TextureRect _emptyHeartsRect = null;
 	private Stats _playerStats = null;
 
 	private int _maxHearts = 4;
@@ -13,8 +14,9 @@ public partial class HealthUi : Control
 		set
 		{
 			_maxHearts = Math.Max(value, 1);
-			if (_heartsRect != null)
-				_heartsRect.Size = Vector2.Right * value * 15;
+			Hearts = Math.Min(Hearts, MaxHearts);
+			if (_emptyHeartsRect != null)
+				_emptyHeartsRect.Size = new Vector2(value * 15, _heartsRect.Texture.GetSize().Y);
 		}
 	}
 
@@ -24,19 +26,21 @@ public partial class HealthUi : Control
 		get => _hearts;
 		set
 		{
+			GD.Print(value);
 			_hearts = Math.Clamp(value, 0, MaxHearts);
 			if (_heartsRect != null)
-				_heartsRect.Size = Vector2.Right * value * 15;
+				_heartsRect.Size = new Vector2(value * 15, _heartsRect.Texture.GetSize().Y);
 		}
 	}
 
 	public override void _Ready()
 	{
 		_heartsRect = GetNode<TextureRect>("HeartUiFull");
+		_emptyHeartsRect = GetNode<TextureRect>("HeartUiEmpty");
 		_playerStats = GetNode<Stats>("/root/PlayerStats");
 
-		_maxHearts = _playerStats.MaxHealth;
-		_hearts = _playerStats.Health;
+		MaxHearts = _playerStats.MaxHealth;
 		_playerStats.HealthChanged += (newHearts) => Hearts = newHearts;
+		_playerStats.MaxHealthChanged += (newHearts) => MaxHearts = newHearts;
 	}
 }
