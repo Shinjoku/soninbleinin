@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://ig0o3gakr7d0" path="res://Assets/World/DirtTileset.png" id="2_w5ebb"]
 [ext_resource type="Texture2D" uid="uid://bp3u64awk8c8i" path="res://Assets/World/CliffTileset.png" id="3_8bu04"]
 [ext_resource type="Texture2D" uid="uid://cchgtkofbpg5c" path="res://Assets/World/GrassBackground.png" id="3_cku18"]
-[ext_resource type="PackedScene" uid="uid://dbr5bbngpvvhb" path="res://Scenes/player.tscn" id="4_g1bks"]
-[ext_resource type="PackedScene" uid="uid://r5r4sg4ttpob" path="res://Scenes/bush.tscn" id="5_hjuae"]
+[ext_resource type="PackedScene" uid="uid://dbr5bbngpvvhb" path="res://Scenes/Player.tscn" id="4_g1bks"]
+[ext_resource type="PackedScene" uid="uid://r5r4sg4ttpob" path="res://Scenes/Bush.tscn" id="5_hjuae"]
 [ext_resource type="PackedScene" uid="uid://81k1c28020fn" path="res://Scenes/Grass.tscn" id="6_lk2x8"]
 [ext_resource type="PackedScene" uid="uid://c3tyqsdgg6edj" path="res://Scenes/Bat.tscn" id="7_ealn0"]
 [ext_resource type="PackedScene" uid="uid://yj5cot7ys81y" path="res://Scenes/HealthUi.tscn" id="8_axrs1"]
@@ -847,7 +847,8 @@ y_sort_enabled = true
 [node name="Player" parent="Foreground" instance=ExtResource("4_g1bks")]
 position = Vector2(128, 80)
 
-[node name="Camera2D" type="Camera2D" parent="Foreground/Player"]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Foreground/Player"]
+remote_path = NodePath("../../../Camera2D")
 
 [node name="Bushes" type="Node2D" parent="Foreground"]
 y_sort_enabled = true
@@ -948,8 +949,13 @@ position = Vector2(15, 127)
 [node name="Tree3" parent="Foreground/Trees" instance=ExtResource("8_jd6qf")]
 position = Vector2(31, 32)
 
-[node name="HealthUI" parent="." instance=ExtResource("8_axrs1")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthUI" parent="CanvasLayer" instance=ExtResource("8_axrs1")]
 offset_left = 2.0
 offset_top = 2.0
 offset_right = 61.0
 offset_bottom = 13.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(128, 80)

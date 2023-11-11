@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 enum State
 {
@@ -19,6 +20,13 @@ public partial class Bat : CharacterBody2D
 	private AnimatedSprite2D _sprite;
 	private Hurtbox _hurtbox = null;
 	private SoftCollision _softCollision;
+	private WanderController _wanderController;
+
+	private readonly List<State> _idleStates = new()
+	{
+		State.Idle,
+		State.Wander
+	};
 
 	[Export]
 	public int Acceleration = 50;
@@ -34,6 +42,7 @@ public partial class Bat : CharacterBody2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
 		_hurtbox = GetNode<Hurtbox>(nameof(Hurtbox));
 		_softCollision = GetNode<SoftCollision>(nameof(SoftCollision));
+		_wanderController = GetNode<WanderController>(nameof(WanderController));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -43,7 +52,7 @@ public partial class Bat : CharacterBody2D
 		else if (_state == State.Idle)
 			IdleState(delta);
 		else if (_state == State.Wander)
-			WanderState();
+			WanderState(delta);
 		else if (_state == State.Chase)
 			ChaseState(delta);
 
@@ -53,10 +62,10 @@ public partial class Bat : CharacterBody2D
 		MoveAndCollide(Velocity * (float)delta);
 	}
 
-	private void Stop(double delta)
-	{
+	private void Stop(double delta) =>
 		Velocity = Velocity.MoveToward(Vector2.Zero, Friction * (float)delta);
-	}
+
+	private State PickRandomState() => _idleStates[new Random().Next(0, _idleStates.Count)];
 
 	private void KnockbackState(double delta)
 	{
@@ -67,14 +76,26 @@ public partial class Bat : CharacterBody2D
 			_state = State.Idle;
 	}
 
+	private void ChoosePacificState()
+	{
+		if (_wanderController.GetTimeLeft() != 0) return;
+		_state = PickRandomState();
+		_wanderController.StartWanderTimer(new Random().Next(1, 3));
+	}
+
 	private void IdleState(double delta)
 	{
 		DetectPlayer();
 		Stop(delta);
+		ChoosePacificState();
 	}
 
-	private void WanderState()
-	{ }
+	private void WanderState(double delta)
+	{
+		DetectPlayer();
+		ChoosePacificState();
+		MoveTo(_wanderController.TargetPosition, delta);
+	}
 
 	private void ChaseState(double delta)
 	{
@@ -87,9 +108,17 @@ public partial class Bat : CharacterBody2D
 			return;
 		}
 
-		var direction = (player.GlobalPosition - GlobalPosition).Normalized();
+		MoveTo(player.GlobalPosition, delta);
+	}
+
+	private void FlipSprite(Vector2 direction) => _sprite.FlipH = direction.X < 0;
+
+	private Vector2 MoveTo(Vector2 targetPosition, double delta)
+	{
+		var direction = GlobalPosition.DirectionTo(targetPosition);
 		Velocity = Velocity.MoveToward(direction * MaxSpeed, Acceleration * (float)delta);
-		_sprite.FlipH = direction.X < 0;
+		FlipSprite(direction);
+		return direction;
 	}
 
 	private void DetectPlayer()
