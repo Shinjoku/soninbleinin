@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://umae45biw6sn"]
+[gd_scene load_steps=15 format=3 uid="uid://umae45biw6sn"]
 
 [ext_resource type="Texture2D" uid="uid://ig0o3gakr7d0" path="res://Assets/World/DirtTileset.png" id="2_w5ebb"]
 [ext_resource type="Texture2D" uid="uid://bp3u64awk8c8i" path="res://Assets/World/CliffTileset.png" id="3_8bu04"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://81k1c28020fn" path="res://Scenes/Grass.tscn" id="6_lk2x8"]
 [ext_resource type="PackedScene" uid="uid://c3tyqsdgg6edj" path="res://Scenes/Bat.tscn" id="7_ealn0"]
 [ext_resource type="PackedScene" uid="uid://yj5cot7ys81y" path="res://Scenes/HealthUi.tscn" id="8_axrs1"]
+[ext_resource type="PackedScene" uid="uid://cmreqixu4uy5a" path="res://Scenes/Tree.tscn" id="8_jd6qf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekogc"]
 texture = ExtResource("2_w5ebb")
@@ -856,13 +857,19 @@ position = Vector2(285, 38)
 position = Vector2(15, 160)
 
 [node name="Bush5" parent="Foreground/Bushes" instance=ExtResource("5_hjuae")]
-position = Vector2(229, 22)
+position = Vector2(180, 22)
 
 [node name="Bush2" parent="Foreground/Bushes" instance=ExtResource("5_hjuae")]
 position = Vector2(49, 114)
 
+[node name="Bush7" parent="Foreground/Bushes" instance=ExtResource("5_hjuae")]
+position = Vector2(17, 61)
+
+[node name="Bush8" parent="Foreground/Bushes" instance=ExtResource("5_hjuae")]
+position = Vector2(147, 38)
+
 [node name="Bush3" parent="Foreground/Bushes" instance=ExtResource("5_hjuae")]
-position = Vector2(243, 72)
+position = Vector2(264, 68)
 
 [node name="Bush6" parent="Foreground/Bushes" instance=ExtResource("5_hjuae")]
 position = Vector2(293, 92)
@@ -930,4 +937,20 @@ position = Vector2(256, 126)
 [node name="Bat6" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
 position = Vector2(218, 158)
 
+[node name="Trees" type="Node2D" parent="Foreground"]
+y_sort_enabled = true
+
+[node name="Tree" parent="Foreground/Trees" instance=ExtResource("8_jd6qf")]
+position = Vector2(237, 34)
+
+[node name="Tree2" parent="Foreground/Trees" instance=ExtResource("8_jd6qf")]
+position = Vector2(15, 127)
+
+[node name="Tree3" parent="Foreground/Trees" instance=ExtResource("8_jd6qf")]
+position = Vector2(31, 32)
+
 [node name="HealthUI" parent="." instance=ExtResource("8_axrs1")]
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 61.0
+offset_bottom = 13.0
