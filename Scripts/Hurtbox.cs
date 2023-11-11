@@ -38,11 +38,11 @@ public partial class Hurtbox : Area2D
 
 	#region Timer
 
-	public void _OnTimerTimeout() => _invincible = false;
+	public void _OnTimerTimeout() => Invincible = false;
 
 	public void StartInvincibility(double duration)
 	{
-		_invincible = true;
+		Invincible = true;
 		_timer.Start(duration);
 	}
 
@@ -50,9 +50,13 @@ public partial class Hurtbox : Area2D
 
 	#region Event Handlers
 
-	public void _OnHurtboxInvincibilityStarted() => SetDeferred("Monitorable", false);
+	public void _OnHurtboxInvincibilityStarted() {
+		SetDeferred(PropertyName.Monitoring, false);
+	}
 
-	public void _OnHurtboxInvincibilityEnded() => SetDeferred("Monitorable", true);
+	public void _OnHurtboxInvincibilityEnded(){
+		SetDeferred(PropertyName.Monitoring, true);
+	}
 
 	#endregion
 }

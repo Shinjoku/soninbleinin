@@ -728,6 +728,10 @@ collision_mask = 32
 position = Vector2(0, -3)
 shape = SubResource("CapsuleShape2D_3vm51")
 
+[node name="Timer" parent="Hurtbox" index="1"]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="area_entered" from="Hurtbox" to="." method="_OnHurtboxAreaEntered"]
 
 [editable path="HitboxPivot/SwordHitbox"]
