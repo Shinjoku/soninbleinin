@@ -4,6 +4,9 @@ using System;
 
 public partial class SoftCollision : Area2D
 {
+	[Export]
+	public int PushForce = 5;
+
 	public bool IsColliding(out Array<Area2D> areas) {
 		areas = GetOverlappingAreas();
 		return areas.Count > 0;
