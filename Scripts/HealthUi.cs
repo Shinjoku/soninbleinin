@@ -15,8 +15,10 @@ public partial class HealthUi : Control
 		{
 			_maxHearts = Math.Max(value, 1);
 			Hearts = Math.Min(Hearts, MaxHearts);
-			if (_emptyHeartsRect != null)
-				_emptyHeartsRect.Size = new Vector2(value * 15, _heartsRect.Texture.GetSize().Y);
+			if (_emptyHeartsRect != null) {
+				Vector2 textureSize = _emptyHeartsRect.Texture.GetSize();
+				_emptyHeartsRect.Size = new Vector2(value * textureSize.X, textureSize.Y);
+			}
 		}
 	}
 
@@ -26,10 +28,11 @@ public partial class HealthUi : Control
 		get => _hearts;
 		set
 		{
-			GD.Print(value);
 			_hearts = Math.Clamp(value, 0, MaxHearts);
-			if (_heartsRect != null)
-				_heartsRect.Size = new Vector2(value * 15, _heartsRect.Texture.GetSize().Y);
+			if (_heartsRect != null) {
+				Vector2 textureSize = _heartsRect.Texture.GetSize();
+				_heartsRect.Size = new Vector2(value * textureSize.X, textureSize.Y);
+			}
 		}
 	}
 
