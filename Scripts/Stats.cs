@@ -15,7 +15,7 @@ public partial class Stats : Node
 		{
 			_maxHealth = value;
 			Health = Math.Min(Health, _maxHealth);
-			EmitSignal("MaxHealthChanged");
+			EmitSignal("MaxHealthChanged", _maxHealth);
 		}
 	}
 
