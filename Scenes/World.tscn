@@ -829,7 +829,7 @@ texture_repeat = 2
 texture = ExtResource("3_cku18")
 centered = false
 region_enabled = true
-region_rect = Rect2(0, 0, 320, 180)
+region_rect = Rect2(-120, -72, 552, 304)
 
 [node name="DirtTilemap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_mr3kc")
@@ -846,6 +846,8 @@ y_sort_enabled = true
 
 [node name="Player" parent="Foreground" instance=ExtResource("4_g1bks")]
 position = Vector2(128, 80)
+
+[node name="Camera2D" type="Camera2D" parent="Foreground/Player"]
 
 [node name="Bushes" type="Node2D" parent="Foreground"]
 y_sort_enabled = true
@@ -920,7 +922,7 @@ position = Vector2(96, 112)
 y_sort_enabled = true
 
 [node name="Bat" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
-position = Vector2(96, 100)
+position = Vector2(77, 98)
 
 [node name="Bat2" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
 position = Vector2(131, 136)
@@ -933,9 +935,6 @@ position = Vector2(217, 97)
 
 [node name="Bat5" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
 position = Vector2(256, 126)
-
-[node name="Bat6" parent="Foreground/Enemies" instance=ExtResource("7_ealn0")]
-position = Vector2(218, 158)
 
 [node name="Trees" type="Node2D" parent="Foreground"]
 y_sort_enabled = true
