@@ -47,10 +47,8 @@ public partial class Bat : CharacterBody2D
 		else if (_state == State.Chase)
 			ChaseState(delta);
 
-		if (_softCollision.IsColliding())
-		{
+		if (_softCollision.IsColliding(out _))
 			Velocity += _softCollision.GetPushVector() * (float)delta * 400;
-		}
 
 		MoveAndCollide(Velocity * (float)delta);
 	}
