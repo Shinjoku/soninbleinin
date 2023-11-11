@@ -18,6 +18,7 @@ public partial class Bat : CharacterBody2D
 	private PlayerDetectionZone _playerDetectionZone;
 	private AnimatedSprite2D _sprite;
 	private Hurtbox _hurtbox = null;
+	private SoftCollision _softCollision;
 
 	[Export]
 	public int Acceleration = 50;
@@ -32,6 +33,7 @@ public partial class Bat : CharacterBody2D
 		_playerDetectionZone = GetNode<PlayerDetectionZone>(nameof(PlayerDetectionZone));
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite");
 		_hurtbox = GetNode<Hurtbox>(nameof(Hurtbox));
+		_softCollision = GetNode<SoftCollision>(nameof(SoftCollision));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -44,6 +46,11 @@ public partial class Bat : CharacterBody2D
 			WanderState();
 		else if (_state == State.Chase)
 			ChaseState(delta);
+
+		if (_softCollision.IsColliding())
+		{
+			Velocity += _softCollision.GetPushVector() * (float)delta * 400;
+		}
 
 		MoveAndCollide(Velocity * (float)delta);
 	}

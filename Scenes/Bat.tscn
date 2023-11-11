@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c3tyqsdgg6edj"]
+[gd_scene load_steps=20 format=3 uid="uid://c3tyqsdgg6edj"]
 
 [ext_resource type="Texture2D" uid="uid://dpvmdno6thoiw" path="res://Assets/Enemies/Bat.png" id="1_p1v7i"]
 [ext_resource type="Script" path="res://Scripts/Bat.cs" id="1_pm2wp"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bhn3p0erbs7hg" path="res://Scenes/Stats.tscn" id="5_ygx1w"]
 [ext_resource type="PackedScene" uid="uid://dr8pmsth8rf8o" path="res://Scenes/PlayerDetectionZone.tscn" id="6_tvcwf"]
 [ext_resource type="PackedScene" uid="uid://dt0si5fkm766m" path="res://Hitboxes and Hurtboxes/Hitbox.tscn" id="7_i11ch"]
+[ext_resource type="PackedScene" uid="uid://dwglcektm2nxt" path="res://Hitboxes and Hurtboxes/SoftCollision.tscn" id="8_7ibbs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_huypo"]
 atlas = ExtResource("1_p1v7i")
@@ -65,6 +66,9 @@ radius = 60.0083
 radius = 8.0
 height = 18.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_tbr7w"]
+radius = 5.0
+
 [node name="Bat" type="CharacterBody2D"]
 collision_layer = 0
 collision_mask = 7
@@ -81,9 +85,11 @@ offset = Vector2(0, -12)
 texture = ExtResource("2_eqtov")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_nmxnd")
 
 [node name="Hurtbox" parent="." instance=ExtResource("3_3t45s")]
+visible = false
 collision_layer = 16
 collision_mask = 4
 
@@ -100,6 +106,7 @@ visible = false
 shape = SubResource("CircleShape2D_hjqs3")
 
 [node name="Hitbox" parent="." instance=ExtResource("7_i11ch")]
+visible = false
 collision_layer = 32
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
@@ -107,9 +114,16 @@ position = Vector2(0, -16)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_l5lga")
 
+[node name="SoftCollision" parent="." instance=ExtResource("8_7ibbs")]
+visible = false
+
+[node name="CollisionShape2D" parent="SoftCollision" index="0"]
+shape = SubResource("CircleShape2D_tbr7w")
+
 [connection signal="area_entered" from="Hurtbox" to="." method="_OnHurtboxAreaEntered"]
 [connection signal="HealthEmpty" from="Stats" to="." method="_OnHealthEmpty"]
 
 [editable path="Hurtbox"]
 [editable path="PlayerDetectionZone"]
 [editable path="Hitbox"]
+[editable path="SoftCollision"]
