@@ -26,6 +26,8 @@ public partial class Player : CharacterBody2D
     private Hurtbox _hurtbox = null;
     private Stats _playerStats = null;
     private Sprite2D _animatedSprite = null;
+    private PackedScene _playerHurtSound = ResourceLoader.Load<PackedScene>("res://Scenes/PlayerHurtSound.tscn");
+    private AnimationPlayer _blinkAnimationPlayer = null;
 
     public override void _Ready()
     {
@@ -35,6 +37,7 @@ public partial class Player : CharacterBody2D
         _playerStats = GetNode<Stats>("/root/PlayerStats");
         _hurtbox = GetNode<Hurtbox>(nameof(Hurtbox));
         _animatedSprite = GetNode<Sprite2D>("Sprite");
+        _blinkAnimationPlayer = GetNode<AnimationPlayer>("BlinkAnimationPlayer");
 
         _animationTree.Active = true;
         _playerStats.HealthEmpty += QueueFree;
@@ -129,5 +132,18 @@ public partial class Player : CharacterBody2D
         _playerStats.Health -= 1;
         _hurtbox.StartInvincibility(0.5);
         _hurtbox.CreateHitEffect();
+        
+        var hitSound = _playerHurtSound.Instantiate<PlayerHurtSound>();
+        GetParent().AddChild(hitSound);
+    }
+
+    public void _OnPlayerHurtboxInvincibilityStarted()
+    {
+        _blinkAnimationPlayer.Play("Start");
+    }
+
+    public void _OnPlayerHurtboxInvincibilityEnded()
+    {
+        _blinkAnimationPlayer.Play("RESET");
     }
 }
