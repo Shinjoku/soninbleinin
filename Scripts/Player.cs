@@ -131,7 +131,9 @@ public partial class Player : CharacterBody2D
     {
         if (_hurtbox.Invincible) return;
         
-        _playerStats.Health -= 1;
+        var hitbox = area as Hitbox;
+
+        _playerStats.Health -= hitbox.Damage;
         _hurtbox.StartInvincibility(InvincibilityTime);
         _hurtbox.CreateHitEffect();
         
