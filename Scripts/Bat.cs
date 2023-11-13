@@ -133,7 +133,7 @@ public partial class Bat : CharacterBody2D
 
 	private void _OnHurtboxAreaEntered(Area2D area)
 	{
-		if (_hurtbox.Invincible) return;
+		// if (_hurtbox.Invincible) return;
 		
 		if (area is SwordHitbox swordHitbox)
 		{

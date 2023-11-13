@@ -129,7 +129,7 @@ public partial class Player : CharacterBody2D
 
     public void _OnHurtboxAreaEntered(Area2D area)
     {
-        if (_hurtbox.Invincible) return;
+        // if (_hurtbox.Invincible) return;
         
         var hitbox = area as Hitbox;
 
