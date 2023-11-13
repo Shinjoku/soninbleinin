@@ -19,6 +19,8 @@ public partial class Player : CharacterBody2D
     public float WalkSpeed = 60.0f;
     [Export]
     public float RollSpeed = 120.0f;
+    [Export]
+    public float InvincibilityTime = 0.5f;
     private AnimationTree _animationTree = null;
     private AnimationNodeStateMachinePlayback _animationState = null;
     private PlayerState _playerState = PlayerState.Move;
@@ -128,9 +130,9 @@ public partial class Player : CharacterBody2D
     public void _OnHurtboxAreaEntered(Area2D area)
     {
         if (_hurtbox.Invincible) return;
-
+        
         _playerStats.Health -= 1;
-        _hurtbox.StartInvincibility(0.5);
+        _hurtbox.StartInvincibility(InvincibilityTime);
         _hurtbox.CreateHitEffect();
         
         var hitSound = _playerHurtSound.Instantiate<PlayerHurtSound>();

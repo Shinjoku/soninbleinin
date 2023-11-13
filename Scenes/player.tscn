@@ -4,14 +4,15 @@
 [ext_resource type="Texture2D" uid="uid://cl0pjljx4v6d5" path="res://Assets/Shadows/MediumShadow.png" id="2_8jtky"]
 [ext_resource type="Texture2D" uid="uid://bpjp8a6vnpn7q" path="res://Assets/Player/Player.png" id="2_xsa33"]
 [ext_resource type="PackedScene" uid="uid://dt0si5fkm766m" path="res://Hitboxes and Hurtboxes/Hitbox.tscn" id="3_003gc"]
-[ext_resource type="Shader" path="res://Shaders/Player.gdshader" id="3_vxgp8"]
+[ext_resource type="Shader" path="res://Shaders/WhiteColor.gdshader" id="3_bf2es"]
 [ext_resource type="Script" path="res://Scripts/SwordHitbox.cs" id="4_5c6gd"]
 [ext_resource type="AudioStream" uid="uid://dn33mpdf64ujp" path="res://Assets/Music and Sounds/Swipe.wav" id="4_jv271"]
 [ext_resource type="PackedScene" uid="uid://cx16cja5vgswp" path="res://Hitboxes and Hurtboxes/Hurtbox.tscn" id="5_aekon"]
 [ext_resource type="AudioStream" uid="uid://bt5p00o2sqknr" path="res://Assets/Music and Sounds/Evade.wav" id="5_osb3m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_adi0f"]
-shader = ExtResource("3_vxgp8")
+resource_local_to_scene = true
+shader = ExtResource("3_bf2es")
 shader_parameter/active = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wlvgm"]
@@ -799,8 +800,8 @@ graph_offset = Vector2(-154.657, -22)
 height = 32.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3vm51"]
-radius = 5.0
-height = 16.0
+radius = 6.0
+height = 20.0
 
 [sub_resource type="Animation" id="Animation_g4cpo"]
 length = 0.001
@@ -819,7 +820,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_uw6ch"]
 resource_name = "Start"
-length = 0.2
+length = 0.1
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -890,11 +891,10 @@ shape = SubResource("CapsuleShape2D_0dn2w")
 disabled = true
 
 [node name="Hurtbox" parent="." instance=ExtResource("5_aekon")]
-visible = false
 collision_mask = 32
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
-position = Vector2(0, -3)
+position = Vector2(-1, -4)
 shape = SubResource("CapsuleShape2D_3vm51")
 
 [node name="Timer" parent="Hurtbox" index="1"]

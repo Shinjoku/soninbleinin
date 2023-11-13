@@ -12,6 +12,8 @@ enum State
 
 public partial class Bat : CharacterBody2D
 {
+	[Export]
+	public float InvincibilityTime = 0.3f;
 	private PackedScene EnemyDeathEffectScene = ResourceLoader.Load<PackedScene>("res://Scenes/EnemyDeathEffect.tscn");
 	private Vector2 _knockback = Vector2.Zero;
 	private Stats _stats;
@@ -21,6 +23,7 @@ public partial class Bat : CharacterBody2D
 	private Hurtbox _hurtbox = null;
 	private SoftCollision _softCollision;
 	private WanderController _wanderController;
+	private AnimationPlayer _blinkAnimationPlayer;
 
 	private readonly List<State> _idleStates = new()
 	{
@@ -43,6 +46,7 @@ public partial class Bat : CharacterBody2D
 		_hurtbox = GetNode<Hurtbox>(nameof(Hurtbox));
 		_softCollision = GetNode<SoftCollision>(nameof(SoftCollision));
 		_wanderController = GetNode<WanderController>(nameof(WanderController));
+		_blinkAnimationPlayer = GetNode<AnimationPlayer>("BlinkAnimationPlayer");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -129,12 +133,15 @@ public partial class Bat : CharacterBody2D
 
 	private void _OnHurtboxAreaEntered(Area2D area)
 	{
+		if (_hurtbox.Invincible) return;
+		
 		if (area is SwordHitbox swordHitbox)
 		{
 			_knockback = swordHitbox.KnockbackVector * swordHitbox.KnockbackForce;
 			_stats.Health -= swordHitbox.Damage;
 			_state = State.Knockback;
 			_hurtbox.CreateHitEffect();
+			_hurtbox.StartInvincibility(InvincibilityTime);
 		}
 	}
 
@@ -149,5 +156,15 @@ public partial class Bat : CharacterBody2D
 	{
 		Die();
 		QueueFree();
+	}
+
+	public void _OnBatHurtboxInvincibilityStarted()
+	{
+		_blinkAnimationPlayer.Play("Start");
+	}
+
+	public void _OnBatHurtboxInvincibilityEnded()
+	{
+		_blinkAnimationPlayer.Play("RESET");
 	}
 }

@@ -1,14 +1,20 @@
-[gd_scene load_steps=21 format=3 uid="uid://c3tyqsdgg6edj"]
+[gd_scene load_steps=26 format=3 uid="uid://c3tyqsdgg6edj"]
 
 [ext_resource type="Texture2D" uid="uid://dpvmdno6thoiw" path="res://Assets/Enemies/Bat.png" id="1_p1v7i"]
 [ext_resource type="Script" path="res://Scripts/Bat.cs" id="1_pm2wp"]
 [ext_resource type="Texture2D" uid="uid://e4heo6siixxn" path="res://Assets/Shadows/SmallShadow.png" id="2_eqtov"]
+[ext_resource type="Shader" path="res://Shaders/WhiteColor.gdshader" id="2_xmw54"]
 [ext_resource type="PackedScene" uid="uid://cx16cja5vgswp" path="res://Hitboxes and Hurtboxes/Hurtbox.tscn" id="3_3t45s"]
 [ext_resource type="PackedScene" uid="uid://bhn3p0erbs7hg" path="res://Scenes/Stats.tscn" id="5_ygx1w"]
 [ext_resource type="PackedScene" uid="uid://dr8pmsth8rf8o" path="res://Scenes/PlayerDetectionZone.tscn" id="6_tvcwf"]
 [ext_resource type="PackedScene" uid="uid://dt0si5fkm766m" path="res://Hitboxes and Hurtboxes/Hitbox.tscn" id="7_i11ch"]
 [ext_resource type="PackedScene" uid="uid://dwglcektm2nxt" path="res://Hitboxes and Hurtboxes/SoftCollision.tscn" id="8_7ibbs"]
 [ext_resource type="PackedScene" uid="uid://cm7pmylne60dy" path="res://Scenes/WanderController.tscn" id="9_0vaaw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q6gqe"]
+resource_local_to_scene = true
+shader = ExtResource("2_xmw54")
+shader_parameter/active = false
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_huypo"]
 atlas = ExtResource("1_p1v7i")
@@ -64,11 +70,49 @@ height = 18.0
 radius = 60.0083
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lga"]
-radius = 8.0
-height = 18.0
+radius = 6.0
+height = 16.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tbr7w"]
 radius = 5.0
+
+[sub_resource type="Animation" id="Animation_dquan"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_3q1vf"]
+resource_name = "Start"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aqmm1"]
+_data = {
+"RESET": SubResource("Animation_dquan"),
+"Start": SubResource("Animation_3q1vf")
+}
 
 [node name="Bat" type="CharacterBody2D"]
 collision_layer = 0
@@ -76,6 +120,7 @@ collision_mask = 7
 script = ExtResource("1_pm2wp")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_q6gqe")
 sprite_frames = SubResource("SpriteFrames_wmk31")
 animation = &"Fly"
 autoplay = "Fly"
@@ -107,12 +152,10 @@ visible = false
 shape = SubResource("CircleShape2D_hjqs3")
 
 [node name="Hitbox" parent="." instance=ExtResource("7_i11ch")]
-visible = false
 collision_layer = 32
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
-position = Vector2(0, -16)
-rotation = -1.5708
+position = Vector2(0, -14)
 shape = SubResource("CapsuleShape2D_l5lga")
 
 [node name="SoftCollision" parent="." instance=ExtResource("8_7ibbs")]
@@ -123,6 +166,13 @@ shape = SubResource("CircleShape2D_tbr7w")
 
 [node name="WanderController" parent="." instance=ExtResource("9_0vaaw")]
 
+[node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_aqmm1")
+}
+
+[connection signal="InvincibilityEnded" from="Hurtbox" to="." method="_OnBatHurtboxInvincibilityEnded"]
+[connection signal="InvincibilityStarted" from="Hurtbox" to="." method="_OnBatHurtboxInvincibilityStarted"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_OnHurtboxAreaEntered"]
 [connection signal="HealthEmpty" from="Stats" to="." method="_OnHealthEmpty"]
 
