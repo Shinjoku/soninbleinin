@@ -8,3 +8,4 @@ It includes a cute feline character that rolls and has a sword and fights enemie
 
 - Bats' soft collision make them fly away too fast sometimes
   - MoveAndCollide has it happening more frequently than MoveAndSlide, but MoveAndSlide makes bats attach to the player
+- Taking multiple hits on the same frame results in taking multiple hearts of damage when it should take only 1
