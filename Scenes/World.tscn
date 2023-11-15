@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://umae45biw6sn"]
+[gd_scene load_steps=16 format=3 uid="uid://umae45biw6sn"]
 
 [ext_resource type="Texture2D" uid="uid://ig0o3gakr7d0" path="res://Assets/World/DirtTileset.png" id="2_w5ebb"]
 [ext_resource type="Texture2D" uid="uid://bp3u64awk8c8i" path="res://Assets/World/CliffTileset.png" id="3_8bu04"]
 [ext_resource type="Texture2D" uid="uid://cchgtkofbpg5c" path="res://Assets/World/GrassBackground.png" id="3_cku18"]
+[ext_resource type="PackedScene" uid="uid://bg6whkaecb1yp" path="res://Scenes/GameCamera.tscn" id="4_cmv7n"]
 [ext_resource type="PackedScene" uid="uid://dbr5bbngpvvhb" path="res://Scenes/player.tscn" id="4_g1bks"]
 [ext_resource type="PackedScene" uid="uid://r5r4sg4ttpob" path="res://Scenes/bush.tscn" id="5_hjuae"]
 [ext_resource type="PackedScene" uid="uid://81k1c28020fn" path="res://Scenes/Grass.tscn" id="6_lk2x8"]
@@ -841,6 +842,12 @@ tile_set = SubResource("TileSet_0cxva")
 format = 2
 layer_0/tile_data = PackedInt32Array(327686, 65536, 3, 327685, 65536, 3, 327684, 65536, 3, 327683, 65536, 3, 1, 131072, 0, 65536, 262144, 1, 65537, 131072, 2, 0, 0, 0, 4, 196608, 0, 65540, 262144, 3, 65541, 458752, 0, 131077, 196608, 2, 327687, 131072, 3, 327682, 327680, 3, 262146, 131072, 0, 262145, 0, 0, 327681, 0, 2, 131072, 196608, 2)
 
+[node name="Camera2D" parent="." instance=ExtResource("4_cmv7n")]
+position = Vector2(128, 80)
+
+[node name="BottomRight" parent="Camera2D/Limits" index="1"]
+position = Vector2(552, 304)
+
 [node name="Foreground" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -957,5 +964,4 @@ offset_top = 2.0
 offset_right = 61.0
 offset_bottom = 13.0
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(128, 80)
+[editable path="Camera2D"]
