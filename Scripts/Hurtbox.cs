@@ -54,7 +54,7 @@ public partial class Hurtbox : Area2D
 
 	public void _OnHurtboxInvincibilityStarted()
 	{
-		_collisionShape.SetDeferred("Disabled", true);
+		_collisionShape.SetDeferred("disabled", true);
 	}
 
 	public void _OnHurtboxInvincibilityEnded()
